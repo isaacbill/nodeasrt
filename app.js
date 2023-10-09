@@ -1,12 +1,15 @@
 const express=require("express")
 const app=express();
-const mysql=require("mysql2")
+const mysql=require("mysql")
+ const dotenv=require('dotenv');
 
+ dotenv.config ({path:'./.env'});
 const db=mysql.createConnection({
-	host:'localhost',
-	user:'root',
-	password:'Isaacokeyo@12',
-	database:'asrt2',
+	host:process.env.DATABASE_HOST,
+	user:process.env.DATABASE_USER,
+	password:process.env.DATABASE_PASSWORD,
+	database:process.env.DATABASE,
+	port:3307,
 });
 db.connect((error)=>{
 	if(error){
