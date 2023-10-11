@@ -14,7 +14,14 @@ const db=mysql.createConnection({
 });
 
 const publicDirectory = path.join(__dirname,'./public');
-app.use(express.static(publicDirectory))
+app.use(express.static(publicDirectory));
+
+//parsing urlencoded bodies(as sent by html forms)
+app.use(express.urlencoded({ extended: false}));
+
+//parse json bodies(as sent by api clients)
+app.use(express.json());
+
 app.set('view engine','hbs');
 
 db.connect((error)=>{
@@ -24,14 +31,10 @@ db.connect((error)=>{
 		console.log("MYSQL connected ---");
 	}
 });
-app.get("/",(req,res)=>{
-//	res.send("<h1>Home page</h1")
-res.render("index")
-});
-app.get("/register",(req,res)=>{
-	//	res.send("<h1>Register page</h1")
-	res.render("register")
-	});
+//define routes
+app.use('/', require('./routes/pages'));
+app.use('/auth', require('./routes/auth'));
+
 app.listen(5000,()=>{
 	console.log("server started at port 5000");
 })
